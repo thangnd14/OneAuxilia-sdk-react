@@ -89,7 +89,7 @@ export default function FactorOne({ children, onChangeStep }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user_general_setting])
-
+  //fix email link
   return (
     <Fragment>
       {strategie === strategieCode.EMAIL_LINK ? (
