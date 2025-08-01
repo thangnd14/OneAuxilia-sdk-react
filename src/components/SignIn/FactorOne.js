@@ -7,6 +7,10 @@ import { stepStatus, strategieCode } from "../../lib/const"
 import { getAuthStrategies, getOtpByParams } from "../../lib/function"
 import { Button } from "../ui"
 
+function isMobile() {
+  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+}
+
 export default function FactorOne({ children, onChangeStep }) {
   const { setLogin, setLoaded, firstSignIn, user_general_setting } = useStore()
   const strategies = getAuthStrategies(user_general_setting.authentication_strategies)
@@ -67,7 +71,18 @@ export default function FactorOne({ children, onChangeStep }) {
   useEffect(() => {
     if (strategies.length > 0) {
       if (otp_code) {
-        onOk(otp_code)
+        if (isMobile) {
+          const bodyData = {
+            strategy: otp_code ? strategieCode.EMAIL_LINK : strategie,
+            email_or_phone: email || firstSignIn.email,
+            code: otp_code ? otp_code : otp
+          }
+          const params = new URLSearchParams(bodyData).toString()
+          window.open(`arpxhaoqjvb2://loginWithEmailLink?${params}`)
+          return
+        } else {
+          onOk(otp_code)
+        }
       } else {
         fetch()
       }
